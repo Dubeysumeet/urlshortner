@@ -37,24 +37,24 @@ const Login = () => {
         }));
     }
 
-    const {data, error, loading, fn:fnLogin} = useFetch(login, formData);
+    const {loading, error, fn: fnLogin, data} = useFetch(login, formData);
     const {fetchUser} = UrlState();
   4
     useEffect(() => {
       if (error === null && data) {
-        // fetchUser();
-        navigate(`/dashboard?${longLink ? `createNew=${longLink}` : ""}`);
         fetchUser();
+        navigate(`/dashboard?${longLink ? `createNew=${longLink}` : ""}`);
+        // fetchUser();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [error, data]);
 
     const handleLogin = async () => {
-        setErrors([])
+        setErrors([]);
         try{
             const schema = Yup.object().shape({
                 email:Yup.string().email("Invalid Email").required("Email is required"),
-                password: Yup.string().min(5, "Password must be 5 character").required("Password is required"),
+                password: Yup.string().min(6, "Password must be 5 character").required("Password is required"),
             });
 
             await schema.validate(formData, {abortEarly: false});
@@ -75,7 +75,7 @@ const Login = () => {
   <CardHeader>
     <CardTitle>Login</CardTitle>
     <CardDescription>to your account if you already have one</CardDescription>
-    {error && <Error message={error.email} />}
+    {error && <Error message={error.message} />}
   </CardHeader>
   <CardContent className="space-y-2">
     <div className="space-y-1">
